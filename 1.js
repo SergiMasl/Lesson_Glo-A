@@ -55,7 +55,7 @@ let getAccumulatedMonth = function () {
   return money - getExpensesMonth();
 };
 
-let accumuLatedMonth = getExpensesMonth();
+let accumuLatedMonth = getAccumulatedMonth();
 
 let getTargetMonth = function () {
   return mission / Math.ceil(accumuLatedMonth);
