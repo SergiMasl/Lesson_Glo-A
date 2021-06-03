@@ -44,25 +44,22 @@ let getStatusIncome = function () {
 };
 console.log(getStatusIncome());
 
-function getExpensesMonth(amount1, amount2) {
+///
+
+let getExpensesMonth = function () {
   return amount1 + amount2;
-}
-let costLivingOfMonth = getExpensesMonth(amount1, amount2);
+};
+console.log("total of cost of living: " + getExpensesMonth());
 
-function getAccumulatedMonth(money, costLivingOfMonth) {
-  return money - costLivingOfMonth;
-}
-let accumulatedMonth = getAccumulatedMonth(money, costLivingOfMonth);
-console.log(accumulatedMonth);
+let getAccumulatedMonth = function () {
+  return money - getExpensesMonth();
+};
 
-function getTargetMonth(mission, accumulatedMonth) {
-  return mission / accumulatedMonth;
-}
-let targetMonth = getTargetMonth(mission, accumulatedMonth);
-console.log(`Cрок достижения цели: ${targetMonth} месяцев`);
+let accumuLatedMonth = getExpensesMonth();
 
-function FuncBudgetDay() {
-  budgetDay = Math.ceil(accumulatedMonth / 30);
-}
-FuncBudgetDay();
+let getTargetMonth = function () {
+  return mission / Math.ceil(accumuLatedMonth);
+};
+
+budgetDay = accumuLatedMonth / 30;
 console.log(`Бюджет на день: ${budgetDay}`);
