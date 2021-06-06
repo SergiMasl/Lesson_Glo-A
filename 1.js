@@ -2,86 +2,96 @@ let isNumber = function (n) {
   return !isNaN(parseFloat(n) && isFinite(n));
 };
 
-let money;
-let income = "freelance";
-let addExpenses = prompt("Перечислети возможные расходы через запятую");
-let deposit = true;
-const mission = 50000;
-let period = 3;
-let budgetDay;
-
-///
-
-let showTypeOf = function (data) {
-  console.log(`${data} is ${typeof data}`);
-};
-showTypeOf(money);
-showTypeOf(income);
-showTypeOf(deposit);
-
-let start = function () {
-  do {
-    money = prompt("Ваш месячный доход?");
-  } while (!isNumber(money));
-};
+let money,
+  start = function () {
+    do {
+      money = prompt("Ваш месячный доход?");
+    } while (!isNumber(money));
+  };
 start();
 
-let expenses = [];
+let appData = {
+  income: {},
+  addIncome: [],
+  expenses: {},
+  addExpenses: [],
+  deposit: false,
+  mission: 50000,
+  period: 3,
+  asking: function () {
+    let addExpenses = prompt("Перечислети возможные расходы через запятую");
+    appData.addExpenses = addExpenses.toLowerCase().split(", ");
+    appData.deposit = confirm("Есть ли депозит в банке?");
 
-//console.log(addExpenses.toLocaleLowerCase().split(","));
+    //
 
-let getExpensesMonth = function () {
-  let sum = 0;
+    for (i = 0; i < 2; i++) {
+      let ammountSum = 0;
+      const expenstNew = prompt("Введите обязательную статью расходов?");
+      for (let key in this.expenses) {
+        if (key === expenstNew) {
+          alert("Введено одинаковое значения! Данные будут перезаписаны.");
+        }
+      }
+      do {
+        ammountSum = prompt("Во сколько это обойдется?");
+      } while (!isNumber(ammountSum));
+      //sum = +ammountSum + sum;
+      this.expenses[expenstNew] = +ammountSum;
+    }
+  },
+};
 
-  for (i = 0; i < 2; i++) {
-    let ammountSum = 0;
-    expenses[i] = prompt("Введите обязательную статью расходов?");
-    // sum += +prompt("Во сколько это обойдется?");
-    do {
-      ammountSum = prompt("Во сколько это обойдется?");
-    } while (!isNumber(ammountSum));
-    sum = +ammountSum + sum;
+appData.getExpensesMonth = function () {
+  for (let key in this.expenses) {
+    appData.expensesMonth = appData.expensesMonth + this.expenses[key];
   }
-  console.log(sum);
-  return sum;
 };
 
-console.log(expenses);
-// for (let i = 0; i < expenses.length; i++) {
-//   console.log(expenses[i].toLowerCase());
-// }
-
-let expensesAmount = getExpensesMonth();
-console.log("total of cost of living: " + expensesAmount);
-
-let getAccumulatedMonth = function () {
-  return money - expensesAmount;
+appData.getBudget = function () {
+  this.budgetMonth = this.budget - this.expensesMonth;
+  this.budgetDay = this.budgetMonth / 30;
 };
 
-let accumuLatedMonth = getAccumulatedMonth();
-
-let getTargetMonth = function () {
-  let targetGoal = mission / accumuLatedMonth;
+appData.getTargetMonth = function () {
+  let targetGoal = this.mission / this.budgetMonth;
   if (targetGoal > 0) {
     console.log(`Цель будет достигнута через: ${targetGoal} месяцев`);
   } else {
     console.log("Цель не будет достигнута");
   }
 };
-getTargetMonth();
 
-budgetDay = accumuLatedMonth / 30;
-console.log(`Бюджет на день: ${budgetDay}`);
-
-let getStatusIncome = function () {
-  if (budgetDay >= 1200) {
+appData.getStatusIncome = function () {
+  if (this.budgetDay >= 1200) {
     return "У вас высокий уровень дохода";
-  } else if (budgetDay > 600 && budgetDay < 1200) {
+  } else if (this.budgetDay > 600 && this.budgetDay < 1200) {
     return "У вас средний уровень дохода";
-  } else if (budgetDay <= 0) {
+  } else if (this.budgetDay <= 0) {
     return "Что то пошло не так";
   } else {
     return "К сожалению у вас уровень дохода ниже среднего";
   }
 };
-console.log(getStatusIncome());
+
+appData.budget = money;
+appData.budgetDay = 0;
+appData.budgetMonth = 0;
+appData.expensesMonth = 0;
+
+appData.asking();
+appData.getExpensesMonth();
+appData.getBudget();
+appData.getTargetMonth();
+appData.getStatusIncome();
+
+console.log("Расходы за месяц: " + appData.expensesMonth);
+console.log("Уровень дохода: " + money);
+
+console.log("\n");
+console.log("Наша программа включает в себя данные: ");
+console.group();
+for (let key in appData) {
+  console.log(key, appData[key]);
+}
+console.groupEnd();
